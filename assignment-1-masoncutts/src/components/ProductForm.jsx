@@ -1,12 +1,8 @@
 import React from 'react'
 
-// TODO: Use useState to manage a model with fields:
-// { name: '', price: '', stock: '', description: '' }
-// TODO: Create a validate() that sets an errors object and returns boolean:
-// - All fields required
-// - price: number with up to 2 decimals, >= 0
-// - stock: non-negative integer
-// TODO: On submit: console.log the model; if valid, call onSubmit(normalizedData)
+// Use useState to manage a model with fields: { name: '', price: '', stock: '', description: '' }
+// Create a validate() that sets an errors object and returns boolean:
+// On submit: console.log the model; if valid, call onSubmit(normalizedData)
 
 export default function ProductForm({ onSubmit }){
   const [model, setModel] = React.useState({ name: '', price: '', stock: '', description: '' })
@@ -47,21 +43,23 @@ export default function ProductForm({ onSubmit }){
     e.preventDefault()
     console.log('Submitting:', model)
     if (!validate()) return
-    onSubmit({ name: model.name, price: Number(model.price), stock: Number(model.stock), description: model.description })
+    const normalizedData = { name: model.name, price: Number(model.price), stock: Number(model.stock), description: model.description }
+    onSubmit(normalizedData)
+    total += 1;
   }
 
   return (
     <form className="row g-3" onSubmit={handleSubmit} noValidate>
       <div className="col-md-6">
         <label className="form-label">Product Name</label>
-        {/* TODO: Controlled input (value, onChange) and inline error */}
+        {/* Controlled input (value, onChange) and inline error */}
         <input className="form-control" value={model.name} onChange={(e) => setModel({...model, name: e.target.value})} />
         {errors.name && <div className="text-danger">{errors.name}</div>}
       </div>
 
       <div className="col-md-3">
         <label className="form-label">Price</label>
-        {/* TODO */}
+        {/* Controlled input (value, onChange) and inline error */}
         <input className="form-control" value={model.price} onChange={(e) => setModel({...model, price: e.target.value})} />
         {errors.price && <div className="text-danger">{errors.price}</div>}
         <div className="form-text">Format: 12.34</div>
@@ -69,15 +67,16 @@ export default function ProductForm({ onSubmit }){
 
       <div className="col-md-3">
         <label className="form-label">Stock</label>
-        {/* TODO */}
+        {/* Controlled input (value, onChange) and inline error */}
         <input className="form-control" value={model.stock} onChange={(e) => setModel({...model, stock: e.target.value})} />
         {errors.stock && <div className="text-danger">{errors.stock}</div>}
       </div>
 
       <div className="col-12">
         <label className="form-label">Description</label>
-        {/* TODO */}
+        {/* Controlled input (value, onChange) and inline error */}
         <textarea className="form-control" rows="3" value={model.description} onChange={(e) => setModel({...model, description: e.target.value})}></textarea>
+        {errors.description && <div className="text-danger">{errors.description}</div>}
       </div>
 
       <div className="col-12 d-flex gap-2">

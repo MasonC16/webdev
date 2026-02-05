@@ -2,27 +2,36 @@ import React, { useMemo, useState } from 'react'
 import ProductForm from './components/ProductForm'
 import ProductList from './components/ProductList'
 
-export default function App(){
-  // TODO: start with [] and consider hydrating from storage once storage helpers are implemented
-  const [items, setItems] = useState([])
+import {
+  getAllProducts,
+  addProduct,
+  removeProduct
+} from './storage/productStorage.js'
 
-  // Optional: toggle between views; start on 'list'
+export default function App(){
+  // start with [] and consider hydrating from storage once storage helpers are implemented
+  const [items, setItems] = useState(getAllProducts())
+
+  // toggle between views; start on 'list'
   const [view, setView] = useState('list') // 'list' | 'form'
 
-  // TODO: compute total from items
-  const total = useMemo(() => /* your code */ 0, [items])
+  // compute total from items
+  const total = useMemo(() => items.length, [items])
 
   function handleCreate(data){
-    // TODO: validate (in the form), persist to storage, then update state
-    // Example flow (do not copy/paste): create id, add to storage, reload items
-    // setItems(...)
-    // setView('list')
-    console.log('Create product (student to implement):', data)
+    // validate, persist to storage, then update state
+    const newProduct = { id: Date.now().toString(), ...data } 
+
+    addProduct(newProduct)
+    setItems(getAllProducts())
+    setView('list')
+    
   }
 
   function handleDelete(id){
-    // TODO: remove from storage, then update state
-    console.log('Delete product (student to implement):', id)
+    // remove from storage, then update state
+    removeProduct(id)
+    setItems(getAllProducts())
   }
 
   return (
