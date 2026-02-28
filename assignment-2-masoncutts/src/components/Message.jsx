@@ -1,6 +1,6 @@
 import React from 'react'
 
-/// Simple alert banner. Students use for confirmation messages.
+// Simple alert banner. Students use for confirmation messages.
 export default function Message({ type = 'info', text, onClose }) {
 
   return( 

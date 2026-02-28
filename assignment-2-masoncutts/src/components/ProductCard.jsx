@@ -1,6 +1,6 @@
 import React from 'react'
 
-/// Product card component. Students implement edit/delete flows in App.jsx and pass handlers here.
+// Product card component. Students implement edit/delete flows in App.jsx and pass handlers here.
 export default function ProductCard({ product, onEdit, onDelete }) {
   return (
     <div className="card h-100 mb-3">

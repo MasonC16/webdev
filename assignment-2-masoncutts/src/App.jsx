@@ -66,6 +66,7 @@ export default function App() {
   return list
   }, [products, query, sortKey])
 
+  // save handler
   function handleSave(product) {
     if (editingId) {
       // update
