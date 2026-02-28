@@ -1,10 +1,6 @@
 import React from 'react'
 
-/**
- * Presentational card for a single product.
- * Show name, price (2 decimals), stock, description.
- * Include Edit and Delete buttons (call parent handlers).
- */
+/// Product card component. Students implement edit/delete flows in App.jsx and pass handlers here.
 export default function ProductCard({ product, onEdit, onDelete }) {
   return (
     <div className="card h-100 mb-3">

@@ -1,11 +1,6 @@
 import React from 'react'
 
-/**
- * Dismissing banner for success/error states.
- * Props: { type: 'success' | 'danger', text: string }
- * Auto-dismiss handled by parent via setTimeout.
- * 
- */
+/// Simple alert banner. Students use for confirmation messages.
 export default function Message({ type = 'info', text, onClose }) {
 
   return( 

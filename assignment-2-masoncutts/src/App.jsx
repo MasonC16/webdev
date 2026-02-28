@@ -3,14 +3,8 @@ import Toolbar from './components/Toolbar'
 import Message from './components/Message'
 import ProductList from './components/ProductList'
 import ProductForm from './components/ProductForm'
+import { readAll, writeAll, resetAll } from './storage/storage'
 
-/**
- * Shell-only app. Students must implement:
- * - localStorage read/write with try/catch (see storage.js)
- * - create, edit, delete flows
- * - search & sort (in memory)
- * - confirmation banners that auto-dismiss
- */
 
 export default function App() {
   // Products
@@ -18,47 +12,106 @@ export default function App() {
 
   // UI
   const [showForm, setShowForm] = useState(false)
-  const [editingId, setEditingId] = useState(null) // null=create; string=edit
+  const [editingId, setEditingId] = useState(null)
 
   // Toolbar
   const [query, setQuery] = useState('')
-  const [sortKey, setSortKey] = useState('name') // 'name' | 'price'
-  const [sortDir, setSortDir] = useState('asc') // 'asc' | 'desc'
+  const [sortKey, setSortKey] = useState('name-asc')
 
   // Banners
-  const [banner, setBanner] = useState(null) // { type, text } | null
+  const [banner, setBanner] = useState(null)
 
-  // Derived list (students implement filter/sort)
-  const visible = useMemo(() => {
-    return products
-  }, [products, query, sortKey, sortDir])
-
-  // Auto-dismiss banner (students implement)
+  // Load products from localStorage on mount
   useEffect(() => {
-    // if (banner) setTimeout(() => setBanner(null), 2000)
+    const saved = readAll()
+    setProducts(saved)
+  }, [])
+
+  // Save products to localStorage on change
+  useEffect(() => {
+    try {
+      writeAll(products)
+    } catch (error) {
+      setBanner({ type: 'danger', text: 'Failed to save products' })
+    }
+  }, [products])
+
+  // Auto-dismiss banner
+  useEffect(() => {
+    if (banner) {
+      const timeout = setTimeout(() => setBanner(null), 2000)
+      return () => clearTimeout(timeout)
+    }
   }, [banner])
 
+  // Derived list
+  const visible = useMemo(() => {
+    let list = [...products]
+    
+    // filter
+    if (query.trim() !== '') {
+      list = list.filter((p) =>
+        p.name.toLowerCase().includes(query.toLowerCase())
+      )
+    }
+
+    //sort 
+    list.sort((a, b) => {
+      if (sortKey === 'name-asc') return a.name.localeCompare(b.name)
+      if (sortKey === 'name-desc') return b.name.localeCompare(a.name)
+      if (sortKey === 'price-asc') return a.price - b.price
+      if (sortKey === 'price-desc') return b.price - a.price
+      return 0
+  })
+  return list
+  }, [products, query, sortKey])
+
   function handleSave(product) {
-    // create vs update
+    if (editingId) {
+      // update
+      const updated = products.map((p) => (p.id === editingId ? {...p, ...product} : p))
+      setProducts(updated)
+      setBanner({ type: 'success', text: 'Product updated' })
+    } else {
+      // create
+      const newProduct = { ...product, id: crypto.randomUUID() }
+      setProducts([...products, newProduct])
+      setBanner({ type: 'success', text: 'Product created' })
+    }
+    setEditingId(null)
+    setShowForm(false)
   }
 
   function handleDelete(id) {
     // delete
+    const filtered = products.filter((p) => p.id !== id)
+    setProducts(filtered)
+    setBanner({ type: 'success', text: 'Product deleted' })
   }
 
   function handleResetStorage() {
     // clear persisted products
+    try{
+      resetAll()
+      setProducts([])
+      setBanner({ type: 'success', text: 'Storage reset' })
+    }catch(error) {
+      setBanner({ type: 'danger', text: 'Failed to reset storage' })
+    }
   }
 
   function startEdit(id) {
     setEditingId(id)
-    setShowForm(True)
+    setShowForm(true)
   }
 
   function startCreate() {
     setEditingId(null)
     setShowForm(true)
   }
+
+  //find products being edited
+  const editingProduct = products.find((p) => p.id === editingId)
 
   return (
     <div className="container py-3">
@@ -74,15 +127,30 @@ export default function App() {
       </header>
 
       <Toolbar
-        /* query, setQuery, sortKey, setSortKey, sortDir, setSortDir, showForm, setShowForm */
+        search={query}
+        onSearchChange={setQuery}
+        sort={sortKey}
+        onSortChange={setSortKey}
+        showForm={showForm}
+        onToggleForm={() => setShowForm(prev => !prev)}
       />
 
-      {banner && <Message /* type, text */ />}
+      {banner && (<Message
+        type={banner.type}
+        text={banner.text}
+      />)}
 
       {showForm ? (
         <div className="mb-3">
           <ProductForm
-            /* initialValues (if editing), onSave, onCancel */
+            name={editingProduct?.name || ''}
+            price={editingProduct?.price || ''}
+            stock={editingProduct?.stock || ''}
+            description={editingProduct?.description || ''}
+            onSave={handleSave}
+            onCancel={() => {
+              setEditingId(null)
+              setShowForm(false)}}
           />
         </div>
       ) : (
@@ -94,7 +162,9 @@ export default function App() {
       )}
 
       <ProductList
-        /* products={visible} onEdit={startEdit} onDelete={handleDelete} */
+        products={visible}
+        onEdit={(product) => startEdit(product.id)}
+        onDelete={handleDelete}
       />
     </div>
   )

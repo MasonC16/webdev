@@ -1,12 +1,6 @@
 import React, { useEffect } from 'react'
 
-/**
- * Controlled form with inline validation.
- * Fields: name, price, stock, description.
- * - Show errors under inputs (on blur and on submit).
- * - On valid submit, call onSave(product). Parent decides create vs edit.
- * - Support Edit mode: parent provides initial values and a cancel action.
- */
+// Form for creating/editing a product. Students implement validation and error display.
 export default function ProductForm({ name = '', price = '', stock = '', description = '', onSave, onCancel }) {
 
   const [errors, setErrors] = React.useState({})
@@ -16,11 +10,12 @@ export default function ProductForm({ name = '', price = '', stock = '', descrip
     setFormData({ name, price, stock, description })
   }, [name, price, stock, description])
 
-
+// Validate individual field on blur
   function validateField(e) {
     const { name, value } = e.target;
     let error = '';
 
+    // Basic required field validation
     if (!value.trim()){
       error = 'This field is required.';
     } else if (name === 'price') {
@@ -43,6 +38,7 @@ export default function ProductForm({ name = '', price = '', stock = '', descrip
 
     const newErrors = {};
 
+    // Basic validation
     if (!formData.name.trim()) newErrors.name = 'Name is required.';
     if (!formData.description.trim()) newErrors.description = 'Description is required.';
     if (!formData.price || parseFloat(formData.price) <= 0) newErrors.price = 'Price must be a positive number.';
@@ -53,6 +49,7 @@ export default function ProductForm({ name = '', price = '', stock = '', descrip
       return;
     }
 
+    // If valid, call onSave with normalized data
     onSave({
       name: formData.name.trim(),
       price: parseFloat(formData.price),
@@ -63,8 +60,8 @@ export default function ProductForm({ name = '', price = '', stock = '', descrip
     setFormData({ name: '', price: '', stock: '', description: '' });
     setErrors({});
   }
-  
 
+  // implements controlled inputs, validation, and error display
   return (
     <form className="row g-3" onSubmit={handleSubmit} noValidate>
       <div className="col-md-6">

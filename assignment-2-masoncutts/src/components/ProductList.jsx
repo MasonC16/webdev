@@ -1,11 +1,7 @@
 import React from 'react'
 import ProductCard from './ProductCard'
 
-/**
- * - If no products, show "No products available."
- * - Otherwise map products to <ProductCard />
- * - Do not mutate props; sorting/filtering should happen in parent.
- */
+/// Stateless component to render a list of products. Students implement filter/sort in App.jsx and pass the visible list here as a prop.
 export default function ProductList({ products = [], onEdit, onDelete }) {
   if (products.length === 0) {
     return (
