@@ -13,10 +13,10 @@ export default function App() {
   return (
     <Routes>
       <Route path="/" element={<Layout />}>
-        <Route index element={<ListView /* {...api} */ />} />
-        <Route path="products/:id" element={<DetailView /* {...api} */ />} />
-        <Route path="new" element={<CreateEditView /* {...api} */ />} />
-        <Route path="edit/:id" element={<CreateEditView /* {...api} */ />} />
+        <Route index element={<ListView  {...api} />} />
+        <Route path="products/:id" element={<DetailView {...api} />} />
+        <Route path="new" element={<CreateEditView {...api} />} />
+        <Route path="edit/:id" element={<CreateEditView {...api} />} />
         <Route path="*" element={<div className="alert alert-warning">Not Found</div>} />
       </Route>
     </Routes>
