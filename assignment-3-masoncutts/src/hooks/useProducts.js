@@ -11,6 +11,7 @@ const STORAGE_KEY = 'a3_products'
  */
 export default function useProducts() {
   const [products, setProducts] = useState([])
+  const [loaded, setLoaded] = useState(false)
 
   // TODO: load from localStorage once on mount
   useEffect(() => {
@@ -22,17 +23,22 @@ export default function useProducts() {
     } catch (err) {
       console.error('Failed to load products from localStorage:', err)
       setProducts([]) // fallback to empty array on error
+    } finally {
+      setLoaded(true)
     }
   }, [])
 
   // TODO: persist to localStorage whenever products change
   useEffect(() => {
+
+    if (!loaded) return
+
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(products))
     } catch (err) {
       console.error('Failed to save products to localStorage:', err)
     }
-  }, [products])
+  }, [products, loaded])
 
   // TODO: implement addProduct(data)
   function addProduct(data) {
