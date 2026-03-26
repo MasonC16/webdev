@@ -2,7 +2,7 @@ import React from 'react'
 import { Link } from 'react-router-dom'
 import ProductCard from '../components/ProductCard'
 
-export default function ListView(/* { products, onDelete, ...toolbar handlers } */) {
+export default function ListView( { products, deleteProduct } ) {
   // TODO: search/filter/sort UI and derived list
 
   return (
@@ -13,12 +13,20 @@ export default function ListView(/* { products, onDelete, ...toolbar handlers } 
       </div>
 
       {/* TODO: empty state if none */}
+      {(!products || products.lenght === 0) && (
+        <div className="alert alert-info"> No products found. </div>
+      )}
 
       <div className="row g-3">
         {/* TODO: map derived products to ProductCard elements */}
-        <div className="col-12">
-          <div className="alert alert-secondary">TODO: render product grid</div>
-        </div>
+        {products && products.map(product => (
+          <div key={product.id} className="col-md-4">
+            <ProductCard
+              product={product}
+              onDelete={() => deleteProduct(product.id)}
+            />
+          </div>
+        ))}
       </div>
     </div>
   )
