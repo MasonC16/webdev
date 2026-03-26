@@ -1,19 +1,11 @@
 import { useEffect, useState } from 'react'
-
 const STORAGE_KEY = 'a3_products'
 
-/**
- * Custom hook contract (student to implement):
- * Returns: { products, addProduct, updateProduct, deleteProduct, resetStorage }
- * - Initialize products from localStorage on mount
- * - Persist products on change (useEffect)
- * - Wrap JSON ops with try/catch
- */
 export default function useProducts() {
   const [products, setProducts] = useState([])
   const [loaded, setLoaded] = useState(false)
 
-  // TODO: load from localStorage once on mount
+  // loading from localStorage once on mount
   useEffect(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY)
@@ -28,9 +20,8 @@ export default function useProducts() {
     }
   }, [])
 
-  // TODO: persist to localStorage whenever products change
+  // persisting to localStorage whenever products change
   useEffect(() => {
-
     if (!loaded) return
 
     try {
@@ -40,7 +31,7 @@ export default function useProducts() {
     }
   }, [products, loaded])
 
-  // TODO: implement addProduct(data)
+  // implementing addProduct(data)
   function addProduct(data) {
     const newProduct = {
       id: crypto.randomUUID(),
@@ -49,7 +40,7 @@ export default function useProducts() {
     setProducts(prev => [...prev, newProduct])
   }
 
-  // TODO: implement updateProduct(id, patch)
+  // implement updateProduct(id, patch)
   function updateProduct(id, patch) {
     setProducts(prev =>
       prev.map(product => product.id === id 
@@ -59,14 +50,14 @@ export default function useProducts() {
     )    
   }
 
-  // TODO: implement deleteProduct(id)
+  // implement deleteProduct(id)
   function deleteProduct(id) {
     setProducts(prev =>
       prev.filter(product => product.id !== id)
     )
   }
 
-  // TODO: implement resetStorage()
+  // implement resetStorage()
   function resetStorage() {
     try{
       localStorage.removeItem(STORAGE_KEY)

@@ -7,7 +7,7 @@ import CreateEditView from './views/CreateEditView'
 import useProducts from './hooks/useProducts'
 
 export default function App() {
-  // TODO: wire up useProducts and pass data/handlers to views
+  // wiring up useProducts and passing data and handlers to views
   const api = useProducts()
 
   return (
@@ -17,7 +17,7 @@ export default function App() {
         <Route path="products/:id" element={<DetailView {...api} />} />
         <Route path="new" element={<CreateEditView {...api} />} />
         <Route path="edit/:id" element={<CreateEditView {...api} />} />
-        <Route path="*" element={<div className="alert alert-warning">Not Found</div>} />
+        <Route path="*" element={<div className="alert alert-warning"> Page Not Found</div>} />
       </Route>
     </Routes>
   )

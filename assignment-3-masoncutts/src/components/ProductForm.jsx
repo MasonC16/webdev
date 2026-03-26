@@ -1,9 +1,6 @@
 import React, { useState } from 'react'
 
-/**
- * Controlled form with inline validation.
- * Props: { initial, onSave, onCancel }
- */
+//Controlled form with inline validation.
 export default function ProductForm({ initial, onSave, onCancel }) {
   const [form, setForm] = useState({
     name: initial?.name || '',
@@ -20,6 +17,7 @@ export default function ProductForm({ initial, onSave, onCancel }) {
     setForm(prev => ({ ...prev, [name]: value }))
   }
 
+  // validation to check if the name, price and stock fields are filled
   function validate() {
     const newErrors = {}
 
@@ -32,8 +30,8 @@ export default function ProductForm({ initial, onSave, onCancel }) {
 
   function handleSubmit(e) {
     e.preventDefault()
-    // TODO: validate and call onSave
 
+    // validating and calling onSave
     const validationErrors = validate()
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors)
@@ -51,53 +49,48 @@ export default function ProductForm({ initial, onSave, onCancel }) {
     <form className="row g-3" onSubmit={handleSubmit} noValidate>
       <div className="col-md-6">
         <label className="form-label">Name</label>
-        {/* TODO: controlled input + error */}
+        {/* controlled input and errors for the name tetxbox */}
         <input
           name="name"
           className="form-control"
           value={form.name}
-          onChange={handleChange}
-        />
+          onChange={handleChange}/>
         {errors.name && <div className="text-danger">{errors.name}</div>}
       </div>
 
       <div className="col-md-3">
         <label className="form-label">Price</label>
-        {/* TODO: controlled input + error */}
+        {/* controlled input and errors for the price tetxbox */}
         <input
           type="number"
           name="price"
           className="form-control"
           value={form.price}
-          onChange={handleChange}
-        />
+          onChange={handleChange}/>
         <div className="form-text">Format: 12.34</div>
         {errors.price && <div className="text-danger">{errors.price}</div>}
       </div>
 
       <div className="col-md-3">
         <label className="form-label">Stock</label>
-        {/* TODO: controlled input + error */}
+        {/* controlled input and errors for the stock tetxbox */}
         <input
           type="number"
           name="stock"
           className="form-control"
           value={form.stock}
-          onChange={handleChange}
-        />
+          onChange={handleChange}/>
         {errors.stock && <div className="text-danger">{errors.stock}</div>}
       </div>
 
       <div className="col-md-6">
         <label className="form-label">Category</label>
-        {/* TODO: select + error */}
+        {/* selection input for the category tetxbox */}
         <select
           name="category"
           className="form-select"
           value={form.category}
-          onChange={handleChange}
-        >
-          <option value="">Choose…</option>
+          onChange={handleChange}>
           <option value="Electronics">Electronics</option>
           <option value="Accessories">Accessories</option>
           <option value="Other">Other</option>
@@ -106,25 +99,23 @@ export default function ProductForm({ initial, onSave, onCancel }) {
 
       <div className="col-12">
         <label className="form-label">Description</label>
-        {/* TODO: controlled textarea + error */}
+        {/* controlled textbox for the description section */}
         <textarea
           name="description"
           className="form-control"
           rows="3"
           value={form.description}
-          onChange={handleChange}
-        />
+          onChange={handleChange}/>
       </div>
 
       <div className="col-12 d-flex gap-2">
         <button className="btn btn-primary" type="submit">Save</button>
-        {/* TODO: Cancel button in edit mode */}
+        {/* the cancel button */}
         {onCancel && (
           <button
             type="button"
             className="btn btn-secondary"
-            onClick={onCancel}
-          >
+            onClick={onCancel}>
             Cancel
           </button>
         )}

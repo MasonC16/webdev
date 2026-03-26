@@ -5,8 +5,8 @@ import ProductForm from '../components/ProductForm'
 export default function CreateEditView( { products, addProduct, updateProduct } ) {
   const { id } = useParams()
   const navigate = useNavigate()
-  // TODO: if id present, preload data and onSave should update; else create
 
+  // if id present, preload data and onSave should update; else create
   const existingProduct = products.find(p => p.id === id)
 
   function handleSave(data){

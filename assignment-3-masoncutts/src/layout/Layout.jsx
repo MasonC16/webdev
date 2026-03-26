@@ -11,7 +11,6 @@ export default function Layout() {
           <Link className="btn btn-sm btn-primary" to="/new">Add Product</Link>
         </nav>
       </header>
-      {/* keep layout concerns here */}
       <Outlet />
     </div>
   )
