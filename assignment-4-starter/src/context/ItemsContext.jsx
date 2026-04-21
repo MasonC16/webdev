@@ -1,13 +1,21 @@
-import React, { createContext } from 'react'
+import React, { createContext, useContext } from 'react'
+import useItems from '../hooks/useItems'
 
+// Create context
 export const ItemsContext = createContext(null)
 
+// Provider
 export function ItemsProvider({ children }) {
-  // TODO: initialize state and handlers (consider a custom useItems hook)
+  const itemsData = useItems()
 
-  const value = {
-    // TODO: expose items, derived list, filter state, CRUD handlers
-  }
+  return (
+    <ItemsContext.Provider value={itemsData}>
+      {children}
+    </ItemsContext.Provider>
+  )
+}
 
-  return <ItemsContext.Provider value={value}>{children}</ItemsContext.Provider>
+// Helper hook
+export function useItemsContext() {
+  return useContext(ItemsContext)
 }

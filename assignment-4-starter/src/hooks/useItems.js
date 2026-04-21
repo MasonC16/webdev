@@ -1,40 +1,44 @@
-import { useEffect, useMemo, useState } from 'react'
-const STORAGE_KEY = 'a4_items'
+import { useEffect, useState } from 'react'
+
+const STORAGE_KEY = 'products_app'
 
 export default function useItems(){
-  const [items, setItems] = useState([])
-  const [search, setSearch] = useState('')
-  const [category, setCategory] = useState('')
-  const [sortKey, setSortKey] = useState('name')
-  const [sortDir, setSortDir] = useState('asc')
-  const [minValue, setMinValue] = useState('')
-  const [maxValue, setMaxValue] = useState('')
+  // Load from localStorage
+  const [items, setItems] = useState(() => {
+    try {
+      const stored = localStorage.getItem(STORAGE_KEY)
+      return stored ? JSON.parse(stored) : []
+    } catch {
+      return []
+    }
+  })
 
-  // TODO: load from localStorage on mount
+  // Save to localStorage
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(items))
+  }, [items])
 
-  // TODO: persist to localStorage when items change
+  // Add item
+  function addItem(item){
+    setItems(prev => [...prev, item])
+  }
 
-  function addItem(/* data */){ /* TODO */ }
-  function updateItem(/* id, patch */){ /* TODO */ }
-  function deleteItem(/* id */){ /* TODO */ }
+  // Update item
+  function updateItem(id, updatedItem){
+    setItems(prev =>
+      prev.map(item => item.id === id ? updatedItem : item)
+    )
+  }
 
-  // const categories = useMemo(() => { /* TODO */ }, [items])
-
-  const derived = useMemo(() => {
-    // TODO: apply search, category, min/max and sort
-    return items
-  }, [items, search, category, minValue, maxValue, sortKey, sortDir])
+  // Delete item
+  function deleteItem(id){
+    setItems(prev => prev.filter(item => item.id !== id))
+  }
 
   return {
-    items, setItems,
-    search, setSearch,
-    category, setCategory,
-    sortKey, setSortKey,
-    sortDir, setSortDir,
-    minValue, setMinValue,
-    maxValue, setMaxValue,
-    categories: [],
-    derived,
-    addItem, updateItem, deleteItem
+    items,
+    addItem,
+    updateItem,
+    deleteItem
   }
 }
