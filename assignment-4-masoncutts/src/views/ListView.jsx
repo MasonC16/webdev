@@ -13,7 +13,7 @@ export default function ListView(){
   const [sortKey, setSortKey] = useState('price')
   const [sortDir, setSortDir] = useState('asc')
 
-  // Derived list (FILTER + SEARCH + SORT)
+  // Derived list
   const filtered = items
     .filter(item =>
       (item.name || '').toLowerCase().includes(search.toLowerCase())
